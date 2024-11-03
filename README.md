@@ -1,1 +1,1 @@
-# InfoSci301
+# InfoSci301-DKU-Fall2024
