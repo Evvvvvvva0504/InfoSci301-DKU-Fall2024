@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Feedforward Network (2D)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        svg {
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .node {
+            fill: #4285f4;
+            stroke: #1a73e8;
+            stroke-width: 2px;
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+        }
+
+        .link {
+            stroke: #999;
+            stroke-width: 1.5px;
+            opacity: 0.8;
+        }
+
+        .arrow {
+            marker-end: url(#arrowhead);
+        }
+
+        .input-arrow,
+        .output-arrow {
+            stroke: #333;
+            stroke-width: 2.5px;
+            marker-end: url(#arrowhead-large);
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #333;
+            text-anchor: middle;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const width = 800, height = 400;
+        const svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const layers = {
+            input: 3,
+            hidden1: 4,
+            hidden2: 3,
+            output: 2
+        };
+
+        const layerNames = Object.keys(layers);
+        const layerSpacing = width / (layerNames.length + 1);
+        const nodeSpacing = height / (Math.max(...Object.values(layers)) + 1);
+
+        const nodes = [];
+        const links = [];
+        const labels = [];
+
+        let xPos = layerSpacing;
+
+        for (const layer of layerNames) {
+            const count = layers[layer];
+            const yPosStart = (height - (count - 1) * nodeSpacing) / 2;
+
+            for (let i = 0; i < count; i++) {
+                nodes.push({
+                    id: `${layer}-${i}`,
+                    x: xPos,
+                    y: yPosStart + i * nodeSpacing,
+                    layer
+                });
+            }
+
+            labels.push({
+                text: layer.toUpperCase() + " LAYER",
+                x: xPos,
+                y: 30,
+                layer
+            });
+
+            xPos += layerSpacing;
+        }
+
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                if (nodes[i].layer !== nodes[j].layer &&
+                    Math.abs(layerNames.indexOf(nodes[i].layer) - layerNames.indexOf(nodes[j].layer)) === 1) {
+                    links.push({ source: nodes[i], target: nodes[j] });
+                }
+            }
+        }
+
+        // Define arrow markers
+        const defs = svg.append("defs");
+
+        defs.append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 10)
+            .attr("refY", 5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+            .attr("fill", "#999");
+
+        defs.append("marker")
+            .attr("id", "arrowhead-large")
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 15)
+            .attr("refY", 5)
+            .attr("markerWidth", 8)
+            .attr("markerHeight", 8)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+            .attr("fill", "#333");
+
+        // Draw input and output arrows
+        svg.append("line")
+            .attr("class", "input-arrow")
+            .attr("x1", 0)
+            .attr("y1", height / 2)
+            .attr("x2", nodes.find(d => d.layer === "input").x - 30)
+            .attr("y2", height / 2);
+
+        svg.append("line")
+            .attr("class", "output-arrow")
+            .attr("x1", nodes.find(d => d.layer === "output").x + 30)
+            .attr("y1", height / 2)
+            .attr("x2", width)
+            .attr("y2", height / 2);
+
+        // Draw links
+        svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link arrow")
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        // Draw nodes
+        svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("circle")
+            .attr("class", "node")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("r", 12);
+
+        // Draw labels
+        svg.selectAll(".label")
+            .data(labels)
+            .enter()
+            .append("text")
+            .attr("class", "label")
+            .attr("x", d => d.x)
+            .attr("y", d => d.y)
+            .text(d => d.text);
+    </script>
+</body>
+</html>
