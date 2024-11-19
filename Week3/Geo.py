@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 import folium
 import pandas as pd
 from EDA import feature, EDA
+'''
+The GEO data is download from [website](https://www.nconemap.gov/datasets/NCDOT::ncdot-county-boundaries/explore?location=34.679395%2C-83.695448%2C8.91)
+
+
+'''
 def load_geojson(filepath):
     """Load GeoJSON file."""
     counties = gpd.read_file(filepath)
@@ -13,7 +18,7 @@ def load_geojson(filepath):
     print("Coordinate Reference System (CRS):", counties.crs)  # Check CRS
     return counties
 
-def plot_static_map(counties, output_image="nc_county_map.png"):
+def plot_static_map(counties, output_image="Figure/nc_county_map.png"):
     """Create a static map visualization with county boundaries."""
     fig, ax = plt.subplots(figsize=(12, 8))
     
@@ -26,7 +31,7 @@ def plot_static_map(counties, output_image="nc_county_map.png"):
     print(f"Static map saved as {output_image}")
     plt.show()
 
-def plot_static_map_with_labels(counties, label_column, output_image="nc_county_map_with_labels.png"):
+def plot_static_map_with_labels(counties, label_column, output_image="Figure/nc_county_map_with_labels.png"):
     """Create a static map visualization with labels."""
     fig, ax = plt.subplots(figsize=(12, 8))
     
@@ -108,7 +113,7 @@ def vote():
     # Count votes by county
     county_counts = data_random_m['county_desc'].value_counts().reset_index()
     county_counts.columns = ['county_desc', 'Votes']  # Rename for clarity
-    print(county_counts.head())  # Preview the vote counts
+    # print(county_counts.head())  # Preview the vote counts
     
     # Load the GeoJSON file
     geojson_path = "Dataset/NCDOT_County_Boundaries.geojson"
@@ -146,9 +151,9 @@ def vote():
         column='Votes',          # Use Votes to color the map
         label_column='CountyName',  # Use CountyName for the labels
         cmap='OrRd',
-        output_image="votes_by_county_with_names.png"
+        output_image="Figure/votes_by_county_with_names.png"
     )
-def plot_vote_map(geo_data, column, cmap='OrRd', output_image="votes_map.png"):
+def plot_vote_map(geo_data, column, cmap='OrRd', output_image="Figure/votes_map.png"):
     fig, ax = plt.subplots(figsize=(12, 8))
     
     # Plot the GeoDataFrame with the vote data
@@ -164,7 +169,7 @@ def plot_vote_map(geo_data, column, cmap='OrRd', output_image="votes_map.png"):
     plt.savefig(output_image, dpi=300)
     print(f"Visualization saved as {output_image}")
     plt.show()
-def plot_vote_map_with_labels(geo_data, column, label_column='CountyName', cmap='OrRd', output_image="votes_map_with_labels.png"):
+def plot_vote_map_with_labels(geo_data, column, label_column='CountyName', cmap='OrRd', output_image="Figure/votes_map_with_labels.png"):
     """
     Plot the vote counts using a color map with county name labels.
 
