@@ -22,7 +22,10 @@ def vote(save_figures, display_figures):
     - display_figures (bool): Whether to display the figures in a pop-up window.
     """
     # Load the vote data
-    data_path = 'Dataset/absentee_random_5000.csv'
+    # 2024
+    # data_path = 'Dataset/absentee_random_20000.csv'
+    # 2016
+    data_path = 'Dataset/2016_random_20000_rows.csv'
     data_random = pd.read_csv(data_path)
     data_random_processed = feature(data_random)  # Custom preprocessing function
     
