@@ -67,7 +67,7 @@ def vote(save_figures, display_figures):
         geo_data=counties,
         column='Votes',
         label_column='CountyName',
-        cmap='OrRd',
+        cmap='Greys',
         output_image="Figure/votes_by_county_with_names.png",
         save=save_figures,
         display=display_figures
