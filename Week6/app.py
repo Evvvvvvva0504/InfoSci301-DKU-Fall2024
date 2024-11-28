@@ -2,19 +2,33 @@ from dash import Dash, dcc, html
 import pandas as pd
 import plotly.express as px
 
-# Sample data
-df = pd.DataFrame({
-    "Country": ["USA", "Canada", "Mexico"],
-    "Cases": [1000, 500, 700]
-})
+# Load and prepare the data
+data_path = 'Data/2016_random_20000_rows.csv'
+data_random = pd.read_csv(data_path)
+
+# You would include data processing here if needed
+# data_random = feature(data_random)
 
 app = Dash(__name__)
 
-fig = px.bar(df, x="Country", y="Cases", title="Sample Dashboard")
+# Age Distribution Plot
+fig_age_distribution = px.histogram(
+    data_random,
+    x='age',
+    color='voter_party_code',
+    labels={'voter_party_code': 'Party Code'},
+    title='Age Distribution by Party',
+    opacity=0.4,
+    barmode='overlay',
+    nbins=50
+)
+fig_age_distribution.update_traces(histnorm='probability density')  # Normalize the histogram
 
-app.layout = html.Div(children=[
-    html.H1("COVID-19 Dashboard"),
-    dcc.Graph(figure=fig)
+
+app.layout = html.Div([
+    html.H1("Voter Data Exploration Dashboard"),
+    dcc.Graph(figure=fig_age_distribution),
+
 ])
 
 if __name__ == "__main__":
