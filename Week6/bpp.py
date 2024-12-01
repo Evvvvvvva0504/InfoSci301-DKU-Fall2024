@@ -34,7 +34,7 @@ fig = px.choropleth_mapbox(
     mapbox_style="carto-positron",
     zoom=5,
     center={"lat": 35.5, "lon": -80},
-    opacity=0.5,
+    opacity=1,
     labels={'Dominant Party': 'Dominant Party'}
 )
 
