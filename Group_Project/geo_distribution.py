@@ -40,7 +40,8 @@ The GEO data is download from [website](https://www.nconemap.gov/datasets/NCDOT:
 
 def vote():
     # Load the vote data
-    data_random = pd.read_csv('Dataset/absentee_random_5000.csv')
+    file_path = 'Dataset/vote2024/2024_random_20000_rows.csv'
+    data_random = pd.read_csv(file_path)
     data_random_m = feature(data_random)  # Assuming feature processes the data
     
     # Count votes by county
@@ -49,7 +50,7 @@ def vote():
     # print(county_counts.head())  # Preview the vote counts
     
     # Load the GeoJSON file
-    geojson_path = "Dataset/NCDOT_County_Boundaries.geojson"
+    geojson_path = "Dataset/Geographical_data/NCDOT_County_Boundaries.geojson"
     counties = gpd.read_file(geojson_path)
 
     
@@ -58,7 +59,7 @@ def vote():
     # print("CountyName (GeoJSON):", counties["CountyName"].unique())  # Debugging unique CountyName values
     
     # convert the Votes to is log scale
-    county_counts['Votes'] = county_counts['Votes'].apply(lambda x: math.log(x+1))
+    # county_counts['Votes'] = county_counts['Votes'].apply(lambda x: math.log(x+1))
     # Convert county_desc in county_counts to uppercase for matching
     county_counts["county_desc"] = county_counts["county_desc"].str.upper()
     # print("county_desc (Vote Data):", county_counts["county_desc"].unique())  # Debugging unique county_desc values
@@ -135,7 +136,7 @@ def plot_vote_map_with_labels(geo_data, column, label_column='CountyName', cmap=
             ax.annotate(
                 text=row[label_column],   # Use county name as label
                 xy=centroid,             # Position at the centroid
-                fontsize=8,
+                fontsize=6,
                 ha='center',
                 color='black'
             )

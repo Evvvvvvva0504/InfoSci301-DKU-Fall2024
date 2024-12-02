@@ -15,7 +15,7 @@ def vote_with_party_preference(save_figures, display_figures):
     """
     # Load the vote data
     # data_path = 'Dataset/absentee_random_20000.csv'
-    data_path = 'Dataset/2016_random_20000_rows.csv'    
+    data_path = 'Dataset/vote2016/2016_random_20000_rows.csv'    
     data_random = pd.read_csv(data_path)
     
     # Aggregate votes by county and party
@@ -30,7 +30,7 @@ def vote_with_party_preference(save_figures, display_figures):
     party_counts['Dominant Party'] = party_counts['Dominant Party'].fillna('No Data')
 
     # Load GeoJSON file with county boundaries
-    geojson_path = "Dataset/NCDOT_County_Boundaries.geojson"
+    geojson_path = "Dataset/Geographical_data/NCDOT_County_Boundaries.geojson"
     counties = gpd.read_file(geojson_path)
     counties["CountyName"] = counties["CountyName"].str.strip().str.upper()
 

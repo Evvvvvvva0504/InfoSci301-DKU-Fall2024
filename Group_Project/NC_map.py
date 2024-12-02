@@ -25,7 +25,7 @@ def vote(save_figures, display_figures):
     # 2024
     # data_path = 'Dataset/absentee_random_20000.csv'
     # 2016
-    data_path = 'Dataset/2016_random_20000_rows.csv'
+    data_path = 'Dataset/vote2016/2016_random_20000_rows.csv'
     data_random = pd.read_csv(data_path)
     data_random_processed = feature(data_random)  # Custom preprocessing function
     
@@ -36,7 +36,7 @@ def vote(save_figures, display_figures):
     county_counts['Votes'] = county_counts['Votes'].apply(lambda x: math.log(x + 1))  # Apply log scale
     
     # Load GeoJSON file with county boundaries
-    geojson_path = "Dataset/NCDOT_County_Boundaries.geojson"
+    geojson_path = "Dataset/Geographical_data/NCDOT_County_Boundaries.geojson"
     counties = gpd.read_file(geojson_path)
     counties["CountyName"] = counties["CountyName"].str.upper()  # Standardize names
     
@@ -50,24 +50,24 @@ def vote(save_figures, display_figures):
     counties['Votes'] = counties['Votes'].fillna(0)  # Fill missing counties with 0 votes
     
     # Save updated GeoJSON for future use (optional)
-    output_geojson_path = "Dataset/NCDOT_County_Boundaries_with_votes.geojson"
+    output_geojson_path = "Dataset/Geographical_data/NCDOT_County_Boundaries_with_votes.geojson"
     counties.to_file(output_geojson_path, driver="GeoJSON")
     print(f"Updated GeoJSON saved to {output_geojson_path}")
     
     # Generate visualizations
-    plot_vote_map(
-        geo_data=counties,
-        column='Votes',
-        cmap='OrRd',
-        output_image="Figure/votes_map.png",
-        save=save_figures,
-        display=display_figures
-    )
+    # plot_vote_map(
+    #     geo_data=counties,
+    #     column='Votes',
+    #     cmap='OrRd',
+    #     output_image="Figure/votes_map.png",
+    #     save=save_figures,
+    #     display=display_figures
+    # )
     plot_vote_map_with_labels(
         geo_data=counties,
         column='Votes',
         label_column='CountyName',
-        cmap='Greys',
+        cmap='OrRd',
         output_image="Figure/votes_by_county_with_names.png",
         save=save_figures,
         display=display_figures
